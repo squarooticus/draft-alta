@@ -2,9 +2,9 @@
 
 This is the working area for the individual Internet-Draft, "Asymmetric Loss-Tolerant Authentication".
 
-* [Editor's Copy](https://squarooticus.github.io/alta/#go.draft-krose-alta.html)
-* [Individual Draft](https://tools.ietf.org/html/draft-krose-alta)
-* [Compare Editor's Copy to Individual Draft](https://squarooticus.github.io/alta/#go.draft-krose-alta.diff)
+* [Editor's Copy](https://squarooticus.github.io/alta/#go.draft-krose-mboned-alta.html)
+* [Individual Draft](https://tools.ietf.org/html/draft-krose-mboned-alta)
+* [Compare Editor's Copy to Individual Draft](https://squarooticus.github.io/alta/#go.draft-krose-mboned-alta.diff)
 
 ## Building the Draft
 
