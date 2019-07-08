@@ -1,7 +1,7 @@
 ---
 title: Asymmetric Loss-Tolerant Authentication
 abbrev: ALTA
-docname: draft-krose-alta-latest
+docname: draft-krose-mboned-alta-latest
 category: exp
 
 # ipr: trust200902
