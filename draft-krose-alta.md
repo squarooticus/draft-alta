@@ -69,69 +69,100 @@ An authentication tag is a combination of zero or more symmetric message authent
 
 The MACs included in a given authentication tag are determined by a scheme, as defined in section 3 of {{STRAUTH}}. Conceptually, a scheme is a mostly backward-looking directed acyclic graph of ALTA payloads such that the MAC of a given payload is contained in two or more other payloads in the stream, enabling the loss of one of these to be tolerated without losing the ability to authenticate the given payload.
 
-For purposes of illustration, a simple example scheme is one in which the ith ALTA payload contains MACs for the (i-1)th and (i-2)th payload:
+For purposes of illustration, a simple example scheme is one in which the ith ALTA payload's authentication tag contains MACs for the (i-1)th and (i-2)th payload:
 
 ~~~ figure
-                                          .
-                                          .
-                                          .
-+-------------+------+                    |
-| payload i+1 | MACs |                    |
-|             |      |                    |
-|             |   i <-------------------+ |
-|             | i-1 <-----------------+ | |
-+---------+---+------+                | | |
+                                              .
+                                              .
+                                              .
++-------------+------+                        |
+| payload i+1 | MACs |                        |
+|             |      |                        |
+|             |   i <---------------------+   |
+|             | i-1 <-----------------+   |   |
++---------+---+------+                |   |   |
           |                    +----------+---------+
           +------------------->| MAC of payload i+1 |
                                +--------------------+
-+-------------+------+                | |
-| payload i   | MACs |                | |
-|             |      |                | |
-|             | i-1 <---------------+ | |
-|             | i-2 <-------------+ | | |
-+---------+---+------+            | | | |
++-------------+------+                |   |
+| payload i   | MACs |                |   |
+|             |      |                |   |
+|             | i-1 <-----------------+   |
+|             | i-2 <-------------+   |   |
++---------+---+------+            |   |   |
           |                    +--------+---------+
           +------------------->| MAC of payload i |
                                +------------------+
-+-------------+------+            | | |
-| payload i-1 | MACs |            | | |
-|             |      |            | | |
-|             | i-2 <-----------+ | | |
-|             | i-3 <--------+  | | | |
-+---------+---+------+       |  | | | |
++-------------+------+            |   |
+| payload i-1 | MACs |            |   |
+|             |      |            |   |
+|             | i-2 <-------------+   |
+|             | i-3 <--------+    |   |
++---------+---+------+       |    |   |
           |                  | +----+-+-------------+
           +------------------->| MAC of payload i-1 |
                              | +--------------------+
-+-------------+------+       |  | |
-| payload i-2 | MACs |       |  | |
-|             |      |       |  | |
-|             | i-3 <------+ |  | |
-|             | i-4 <----+ | |  | |
-+---------+---+------+   | | |  | |
-          |              | | | ++-+-----------------+
++-------------+------+       |    |
+| payload i-2 | MACs |       |    |
+|             |      |       |    |
+|             | i-3 <--------+    |
+|             | i-4 <----+   |    |
++---------+---+------+   |   |    |
+          |              |   | ++-+-----------------+
           +------------------->| MAC of payload i-2 |
-                         | | | +--------------------+
-                         | | |
-                         | | |
-                         . . .
-                         . . .
-                         . . .
+                         |   | +--------------------+
+                         |   |
+                         |   |
+                         .   .
+                         .   .
+                         .   .
 ~~~
 
-The recommended scheme is more complex and will be covered in the section on scheme construction.
+The recommended scheme is more complex and will be covered in detail in the section on scheme construction.
 
 Encoding a scheme relies on ALTA payloads being addressable deterministically by an index even in the presence of reordering or loss. This index may be provided by a sequence number in the application data or by a (truncated but fully-resolvable) payload sequence number added at ALTA payload construction time. Two modes are supported:
 
-* If the index increments by exactly one for each payload in the stream, and if the scheme is known to both sender and receiver, then indices are not required to be encoded for each MAC in an authentication tag as they can be deduced from a given payload's index and from the DAG associated with the scheme.
-* If the index increments unpredictably, or if the scheme is not known to the receiver, then each MAC in an authentication tag must contain the index of the ALTA payload from which the MAC is computed. For compactness, this index will be encoded as an offset relative to the index of the containing payload.
+* If the index increments by exactly one for each payload in the stream, and if the scheme is known to both sender and receiver, then indices are not required to be encoded for each MAC in an authentication tag as they can be deduced from a given payload's index and from the DAG associated with the scheme. Hereafter this is referred to as *implicit index mode*.
+* If the index increments unpredictably, or if the scheme is not known to the receiver, then each MAC in an authentication tag must be paired with the explicit index of the ALTA payload from which the MAC is computed. For compactness, this index will be encoded as an offset relative to the index of the containing payload. Hereafter this is referred to as *explicit index mode*.
 
-Authenticity of a payload is established by a chain of MACs rooted in an ALTA payload containing a digital signature created by a key in which trust has been established out-of-band. Delivery of application data must be delayed until a payload has been authenticated. Note that a given payload may be authenticated by a digital signature as well as by one or more MAC chains; within authentication deadline constraints, receivers should prefer to authenticate by MAC, minimizing the computational load imposed by digital signature authentication.
+Authenticity of a payload is established by a chain of MACs rooted in an ALTA payload whose authentication tag contains a digital signature created by a key in which trust has been established out-of-band. Delivery of application data must be delayed until a payload has been authenticated. Note that a given payload may be authenticated by a digital signature as well as by one or more MAC chains; within authentication deadline constraints, receivers should prefer to authenticate by MAC, minimizing the computational load imposed by digital signature authentication.
 
-The variable length of authentication tags in ALTA has implications for application data segmentation when constant-length datagrams are desired (e.g., to maximize data per packet with a given path MTU).
+The variable length of authentication tags in ALTA has implications for application data segmentation when constant-length datagrams are desired (e.g., to maximize data per UDP packet with a given path MTU while avoiding fragmentation).
 
 # Protocol Details
 
 ## ALTA Payload
+
+### Explicit Index Form
+
+An ALTA payload with explicit indices comprises the following elements (defined below) concatenated in-order:
+
+* A header octet
+* An optional payload index
+* A sequence of (index, MAC) pairs
+* An optional digital signature
+* Application data
+
+~~~ diagram
+ 0 1 2 3 4 5 6 7
++-+-+-+-+-+-+-+-+
+|MACct|S| rsvd  |
++-+-+-+-+-+-+-+-+
+~~~
+{: #header-octet title="Header Octet"}
+
+The first octet of the payload contains the count of MACs included in the payload (`MACct`) as well as a flag `S` indicating whether the payload also contains a digital signature. It also contains four reserved bits which MUST be set to 0 by senders and ignored by receivers.
+
+~~~ diagram
+ 0                   1
+ 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-
+|     index     | MAC...
++-+-+-+-+-+-+-+-+-+-+-+-
+~~~
+{: #explicit-index-mac title="MAC with explicit index"}
+
+Each MAC encoded in the payload comprises a single-octet index, expressed as an offset in two's complement, followed by the digest, which is of a constant length specified by out-of-band metadata.
 
 ### Index
 
@@ -150,6 +181,10 @@ The variable length of authentication tags in ALTA has implications for applicat
 # Security Considerations
 
 TODO Security
+
+# Operational Considerations
+
+As ALTA requires an out-of-band channel for provisioning of metadata, including digital signature keys and cryptographic algorithms, versioning of the protocol to support a future ALTA revision may be performed there and acted upon by the application.
 
 # IANA Considerations
 
