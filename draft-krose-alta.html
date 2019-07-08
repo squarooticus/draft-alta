@@ -287,18 +287,20 @@ ul.toc li {
 <link href="#rfc.section.3" rel="Chapter" title="3 Protocol Overview">
 <link href="#rfc.section.4" rel="Chapter" title="4 Protocol Details">
 <link href="#rfc.section.4.1" rel="Chapter" title="4.1 ALTA Payload">
-<link href="#rfc.section.4.1.1" rel="Chapter" title="4.1.1 Index">
-<link href="#rfc.section.4.1.2" rel="Chapter" title="4.1.2 MAC Computation">
-<link href="#rfc.section.4.1.3" rel="Chapter" title="4.1.3 Application Data">
+<link href="#rfc.section.4.1.1" rel="Chapter" title="4.1.1 Explicit Index Form">
+<link href="#rfc.section.4.1.2" rel="Chapter" title="4.1.2 Index">
+<link href="#rfc.section.4.1.3" rel="Chapter" title="4.1.3 MAC Computation">
+<link href="#rfc.section.4.1.4" rel="Chapter" title="4.1.4 Application Data">
 <link href="#rfc.section.4.2" rel="Chapter" title="4.2 Authentication Tag">
 <link href="#rfc.section.4.2.1" rel="Chapter" title="4.2.1 Chained MACs">
 <link href="#rfc.section.4.2.2" rel="Chapter" title="4.2.2 Digital Signature">
 <link href="#rfc.section.4.3" rel="Chapter" title="4.3 Scheme Construction">
 <link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations">
-<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations">
-<link href="#rfc.references" rel="Chapter" title="7 References">
-<link href="#rfc.references.1" rel="Chapter" title="7.1 Normative References">
-<link href="#rfc.references.2" rel="Chapter" title="7.2 Informative References">
+<link href="#rfc.section.6" rel="Chapter" title="6 Operational Considerations">
+<link href="#rfc.section.7" rel="Chapter" title="7 IANA Considerations">
+<link href="#rfc.references" rel="Chapter" title="8 References">
+<link href="#rfc.references.1" rel="Chapter" title="8.1 Normative References">
+<link href="#rfc.references.2" rel="Chapter" title="8.2 Informative References">
 <link href="#rfc.acknowledgments" rel="Chapter">
 <link href="#rfc.authors" rel="Chapter">
 
@@ -308,7 +310,7 @@ ul.toc li {
 
   <meta name="dct.creator" content="Rose, K." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-krose-alta-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2019-07-07" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-07-08" />
   <meta name="dct.abstract" content="Establishing authenticity of a stream of datagrams in the presence of multiple receivers is naively achieved through the use of per-packet asymmetric digital signatures, but at high computational cost for both senders and receivers. Timed Efficient Stream Loss-Tolerant Authentication (TESLA) instead employs relatively cheap symmetric authentication, achieving asymmetry via time-delayed key disclosure, while adding latency to verification and imposing requirements on time synchronization between receivers and the sender to prevent forgery. This document introduces Asymmetric Loss-Tolerant Authentication (ALTA), which employs an acyclic graph of message authentication codes (MACs) transmitted alongside data payloads, with redundancy to enable authentication of all received payloads in the presence of certain patterns of loss, along with regularly paced digital signatures. ALTA requires no time synchronization and enables authentication of payloads as soon as sufficient authentication material has been received." />
   <meta name="description" content="Establishing authenticity of a stream of datagrams in the presence of multiple receivers is naively achieved through the use of per-packet asymmetric digital signatures, but at high computational cost for both senders and receivers. Timed Efficient Stream Loss-Tolerant Authentication (TESLA) instead employs relatively cheap symmetric authentication, achieving asymmetry via time-delayed key disclosure, while adding latency to verification and imposing requirements on time synchronization between receivers and the sender to prevent forgery. This document introduces Asymmetric Loss-Tolerant Authentication (ALTA), which employs an acyclic graph of message authentication codes (MACs) transmitted alongside data payloads, with redundancy to enable authentication of all received payloads in the presence of certain patterns of loss, along with regularly paced digital signatures. ALTA requires no time synchronization and enables authentication of payloads as soon as sufficient authentication material has been received." />
 
@@ -329,10 +331,10 @@ ul.toc li {
 </tr>
 <tr>
 <td class="left">Intended status: Experimental</td>
-<td class="right">July 07, 2019</td>
+<td class="right">July 08, 2019</td>
 </tr>
 <tr>
-<td class="left">Expires: January 8, 2020</td>
+<td class="left">Expires: January 9, 2020</td>
 <td class="right"></td>
 </tr>
 
@@ -349,7 +351,7 @@ ul.toc li {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 8, 2020.</p>
+<p>This Internet-Draft will expire on January 9, 2020.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -369,11 +371,13 @@ ul.toc li {
 </li>
 <ul><li>4.1.   <a href="#rfc.section.4.1">ALTA Payload</a>
 </li>
-<ul><li>4.1.1.   <a href="#rfc.section.4.1.1">Index</a>
+<ul><li>4.1.1.   <a href="#rfc.section.4.1.1">Explicit Index Form</a>
 </li>
-<li>4.1.2.   <a href="#rfc.section.4.1.2">MAC Computation</a>
+<li>4.1.2.   <a href="#rfc.section.4.1.2">Index</a>
 </li>
-<li>4.1.3.   <a href="#rfc.section.4.1.3">Application Data</a>
+<li>4.1.3.   <a href="#rfc.section.4.1.3">MAC Computation</a>
+</li>
+<li>4.1.4.   <a href="#rfc.section.4.1.4">Application Data</a>
 </li>
 </ul><li>4.2.   <a href="#rfc.section.4.2">Authentication Tag</a>
 </li>
@@ -385,13 +389,15 @@ ul.toc li {
 </li>
 </ul><li>5.   <a href="#rfc.section.5">Security Considerations</a>
 </li>
-<li>6.   <a href="#rfc.section.6">IANA Considerations</a>
+<li>6.   <a href="#rfc.section.6">Operational Considerations</a>
 </li>
-<li>7.   <a href="#rfc.references">References</a>
+<li>7.   <a href="#rfc.section.7">IANA Considerations</a>
 </li>
-<ul><li>7.1.   <a href="#rfc.references.1">Normative References</a>
+<li>8.   <a href="#rfc.references">References</a>
 </li>
-<li>7.2.   <a href="#rfc.references.2">Informative References</a>
+<ul><li>8.1.   <a href="#rfc.references.1">Normative References</a>
+</li>
+<li>8.2.   <a href="#rfc.references.2">Informative References</a>
 </li>
 </ul><li><a href="#rfc.acknowledgments">Acknowledgments</a>
 </li>
@@ -419,63 +425,63 @@ ul.toc li {
 <p id="rfc.section.3.p.1">ALTA is intended for streaming datagram use cases in which the receiving application has a deadline for the utility of received data and can tolerate a degree of random packet loss. It combines a segment of application data with a variable-length authentication tag into an ALTA payload to be sent as a unit in a single datagram, with the authentication tags constructed in such a way that a receiver will be able to authenticate nearly all such ALTA payloads received by the deadline under certain patterns of random packet loss.</p>
 <p id="rfc.section.3.p.2">An authentication tag is a combination of zero or more symmetric message authentication codes (MACs) and either zero or one digital signature. Each MAC is of another ALTA payload in the stream, while the digital signature is of the containing ALTA payload with the signature field itself replaced by all zeroes.</p>
 <p id="rfc.section.3.p.3">The MACs included in a given authentication tag are determined by a scheme, as defined in section 3 of <a href="#STRAUTH" class="xref">[STRAUTH]</a>. Conceptually, a scheme is a mostly backward-looking directed acyclic graph of ALTA payloads such that the MAC of a given payload is contained in two or more other payloads in the stream, enabling the loss of one of these to be tolerated without losing the ability to authenticate the given payload.</p>
-<p id="rfc.section.3.p.4">For purposes of illustration, a simple example scheme is one in which the ith ALTA payload contains MACs for the (i-1)th and (i-2)th payload:</p>
+<p id="rfc.section.3.p.4">For purposes of illustration, a simple example scheme is one in which the ith ALTA payload&#8217;s authentication tag contains MACs for the (i-1)th and (i-2)th payload:</p>
 <pre>
-                                          .
-                                          .
-                                          .
-+-------------+------+                    |
-| payload i+1 | MACs |                    |
-|             |      |                    |
-|             |   i &lt;-------------------+ |
-|             | i-1 &lt;-----------------+ | |
-+---------+---+------+                | | |
+                                              .
+                                              .
+                                              .
++-------------+------+                        |
+| payload i+1 | MACs |                        |
+|             |      |                        |
+|             |   i &lt;---------------------+   |
+|             | i-1 &lt;-----------------+   |   |
++---------+---+------+                |   |   |
           |                    +----------+---------+
           +-------------------&gt;| MAC of payload i+1 |
                                +--------------------+
-+-------------+------+                | |
-| payload i   | MACs |                | |
-|             |      |                | |
-|             | i-1 &lt;---------------+ | |
-|             | i-2 &lt;-------------+ | | |
-+---------+---+------+            | | | |
++-------------+------+                |   |
+| payload i   | MACs |                |   |
+|             |      |                |   |
+|             | i-1 &lt;-----------------+   |
+|             | i-2 &lt;-------------+   |   |
++---------+---+------+            |   |   |
           |                    +--------+---------+
           +-------------------&gt;| MAC of payload i |
                                +------------------+
-+-------------+------+            | | |
-| payload i-1 | MACs |            | | |
-|             |      |            | | |
-|             | i-2 &lt;-----------+ | | |
-|             | i-3 &lt;--------+  | | | |
-+---------+---+------+       |  | | | |
++-------------+------+            |   |
+| payload i-1 | MACs |            |   |
+|             |      |            |   |
+|             | i-2 &lt;-------------+   |
+|             | i-3 &lt;--------+    |   |
++---------+---+------+       |    |   |
           |                  | +----+-+-------------+
           +-------------------&gt;| MAC of payload i-1 |
                              | +--------------------+
-+-------------+------+       |  | |
-| payload i-2 | MACs |       |  | |
-|             |      |       |  | |
-|             | i-3 &lt;------+ |  | |
-|             | i-4 &lt;----+ | |  | |
-+---------+---+------+   | | |  | |
-          |              | | | ++-+-----------------+
++-------------+------+       |    |
+| payload i-2 | MACs |       |    |
+|             |      |       |    |
+|             | i-3 &lt;--------+    |
+|             | i-4 &lt;----+   |    |
++---------+---+------+   |   |    |
+          |              |   | ++-+-----------------+
           +-------------------&gt;| MAC of payload i-2 |
-                         | | | +--------------------+
-                         | | |
-                         | | |
-                         . . .
-                         . . .
-                         . . .
+                         |   | +--------------------+
+                         |   |
+                         |   |
+                         .   .
+                         .   .
+                         .   .
 </pre>
-<p id="rfc.section.3.p.5">The recommended scheme is more complex and will be covered in the section on scheme construction.</p>
+<p id="rfc.section.3.p.5">The recommended scheme is more complex and will be covered in detail in the section on scheme construction.</p>
 <p id="rfc.section.3.p.6">Encoding a scheme relies on ALTA payloads being addressable deterministically by an index even in the presence of reordering or loss. This index may be provided by a sequence number in the application data or by a (truncated but fully-resolvable) payload sequence number added at ALTA payload construction time. Two modes are supported:</p>
 <p></p>
 
 <ul>
-<li>If the index increments by exactly one for each payload in the stream, and if the scheme is known to both sender and receiver, then indices are not required to be encoded for each MAC in an authentication tag as they can be deduced from a given payload&#8217;s index and from the DAG associated with the scheme.</li>
-<li>If the index increments unpredictably, or if the scheme is not known to the receiver, then each MAC in an authentication tag must contain the index of the ALTA payload from which the MAC is computed. For compactness, this index will be encoded as an offset relative to the index of the containing payload.</li>
+<li>If the index increments by exactly one for each payload in the stream, and if the scheme is known to both sender and receiver, then indices are not required to be encoded for each MAC in an authentication tag as they can be deduced from a given payload&#8217;s index and from the DAG associated with the scheme. Hereafter this is referred to as <em>implicit index mode</em>.</li>
+<li>If the index increments unpredictably, or if the scheme is not known to the receiver, then each MAC in an authentication tag must be paired with the explicit index of the ALTA payload from which the MAC is computed. For compactness, this index will be encoded as an offset relative to the index of the containing payload. Hereafter this is referred to as <em>explicit index mode</em>.</li>
 </ul>
-<p id="rfc.section.3.p.8">Authenticity of a payload is established by a chain of MACs rooted in an ALTA payload containing a digital signature created by a key in which trust has been established out-of-band. Delivery of application data must be delayed until a payload has been authenticated. Note that a given payload may be authenticated by a digital signature as well as by one or more MAC chains; within authentication deadline constraints, receivers should prefer to authenticate by MAC, minimizing the computational load imposed by digital signature authentication.</p>
-<p id="rfc.section.3.p.9">The variable length of authentication tags in ALTA has implications for application data segmentation when constant-length datagrams are desired (e.g., to maximize data per packet with a given path MTU).</p>
+<p id="rfc.section.3.p.8">Authenticity of a payload is established by a chain of MACs rooted in an ALTA payload whose authentication tag contains a digital signature created by a key in which trust has been established out-of-band. Delivery of application data must be delayed until a payload has been authenticated. Note that a given payload may be authenticated by a digital signature as well as by one or more MAC chains; within authentication deadline constraints, receivers should prefer to authenticate by MAC, minimizing the computational load imposed by digital signature authentication.</p>
+<p id="rfc.section.3.p.9">The variable length of authentication tags in ALTA has implications for application data segmentation when constant-length datagrams are desired (e.g., to maximize data per UDP packet with a given path MTU while avoiding fragmentation).</p>
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#protocol-details" id="protocol-details">Protocol Details</a>
 </h1>
@@ -483,13 +489,47 @@ ul.toc li {
 <a href="#rfc.section.4.1">4.1.</a> <a href="#alta-payload" id="alta-payload">ALTA Payload</a>
 </h1>
 <h1 id="rfc.section.4.1.1">
-<a href="#rfc.section.4.1.1">4.1.1.</a> <a href="#index" id="index">Index</a>
+<a href="#rfc.section.4.1.1">4.1.1.</a> <a href="#explicit-index-form" id="explicit-index-form">Explicit Index Form</a>
 </h1>
+<p id="rfc.section.4.1.1.p.1">An ALTA payload with explicit indices comprises the following elements (defined below) concatenated in-order:</p>
+<p></p>
+
+<ul>
+<li>A header octet</li>
+<li>An optional payload index</li>
+<li>A sequence of (index, MAC) pairs</li>
+<li>An optional digital signature</li>
+<li>Application data</li>
+</ul>
+<div id="rfc.figure.1"></div>
+<div id="header-octet"></div>
+<pre>
+ 0 1 2 3 4 5 6 7
++-+-+-+-+-+-+-+-+
+|MACct|S| rsvd  |
++-+-+-+-+-+-+-+-+
+</pre>
+<p class="figure">Figure 1: Header Octet</p>
+<p id="rfc.section.4.1.1.p.3">The first octet of the payload contains the count of MACs included in the payload (<samp>MACct</samp>) as well as a flag <samp>S</samp> indicating whether the payload also contains a digital signature. It also contains four reserved bits which MUST be set to 0 by senders and ignored by receivers.</p>
+<div id="rfc.figure.2"></div>
+<div id="explicit-index-mac"></div>
+<pre>
+ 0                   1
+ 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-
+|     index     | MAC...
++-+-+-+-+-+-+-+-+-+-+-+-
+</pre>
+<p class="figure">Figure 2: MAC with explicit index</p>
+<p id="rfc.section.4.1.1.p.4">Each MAC encoded in the payload comprises a single-octet index, expressed as an offset in two&#8217;s complement, followed by the digest, which is of a constant length specified by out-of-band metadata.</p>
 <h1 id="rfc.section.4.1.2">
-<a href="#rfc.section.4.1.2">4.1.2.</a> <a href="#mac-computation" id="mac-computation">MAC Computation</a>
+<a href="#rfc.section.4.1.2">4.1.2.</a> <a href="#index" id="index">Index</a>
 </h1>
 <h1 id="rfc.section.4.1.3">
-<a href="#rfc.section.4.1.3">4.1.3.</a> <a href="#application-data" id="application-data">Application Data</a>
+<a href="#rfc.section.4.1.3">4.1.3.</a> <a href="#mac-computation" id="mac-computation">MAC Computation</a>
+</h1>
+<h1 id="rfc.section.4.1.4">
+<a href="#rfc.section.4.1.4">4.1.4.</a> <a href="#application-data" id="application-data">Application Data</a>
 </h1>
 <h1 id="rfc.section.4.2">
 <a href="#rfc.section.4.2">4.2.</a> <a href="#authentication-tag" id="authentication-tag">Authentication Tag</a>
@@ -508,20 +548,24 @@ ul.toc li {
 </h1>
 <p id="rfc.section.5.p.1">TODO Security</p>
 <h1 id="rfc.section.6">
-<a href="#rfc.section.6">6.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
+<a href="#rfc.section.6">6.</a> <a href="#operational-considerations" id="operational-considerations">Operational Considerations</a>
 </h1>
-<p id="rfc.section.6.p.1">This document has no IANA actions.</p>
+<p id="rfc.section.6.p.1">As ALTA requires an out-of-band channel for provisioning of metadata, including digital signature keys and cryptographic algorithms, versioning of the protocol to support a future ALTA revision may be performed there and acted upon by the application.</p>
+<h1 id="rfc.section.7">
+<a href="#rfc.section.7">7.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
+</h1>
+<p id="rfc.section.7.p.1">This document has no IANA actions.</p>
 <h1 id="rfc.references">
-<a href="#rfc.references">7.</a> References</h1>
+<a href="#rfc.references">8.</a> References</h1>
 <h1 id="rfc.references.1">
-<a href="#rfc.references.1">7.1.</a> Normative References</h1>
+<a href="#rfc.references.1">8.1.</a> Normative References</h1>
 <table><tbody><tr>
 <td class="reference"><b id="RFC8174">[RFC8174]</b></td>
 <td class="top">
 <a>Leiba, B.</a>, "<a href="https://tools.ietf.org/html/rfc8174">Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</a>", BCP 14, RFC 8174, DOI 10.17487/RFC8174, May 2017.</td>
 </tr></tbody></table>
 <h1 id="rfc.references.2">
-<a href="#rfc.references.2">7.2.</a> Informative References</h1>
+<a href="#rfc.references.2">8.2.</a> Informative References</h1>
 <table><tbody>
 <tr>
 <td class="reference"><b id="RFC2119">[RFC2119]</b></td>
