@@ -76,36 +76,36 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-   2.  Conventions and Definitions . . . . . . . . . . . . . . . . .   3
+   2.  Conventions and Definitions . . . . . . . . . . . . . . . . .   4
    3.  Protocol Overview . . . . . . . . . . . . . . . . . . . . . .   4
    4.  Protocol Details  . . . . . . . . . . . . . . . . . . . . . .   6
      4.1.  ALTA Payload  . . . . . . . . . . . . . . . . . . . . . .   6
-       4.1.1.  Explicit Index Form . . . . . . . . . . . . . . . . .   6
-       4.1.2.  Index . . . . . . . . . . . . . . . . . . . . . . . .   7
-       4.1.3.  MAC Computation . . . . . . . . . . . . . . . . . . .   7
-       4.1.4.  Application Data  . . . . . . . . . . . . . . . . . .   7
-     4.2.  Authentication Tag  . . . . . . . . . . . . . . . . . . .   7
-       4.2.1.  Chained MACs  . . . . . . . . . . . . . . . . . . . .   7
-       4.2.2.  Digital Signature . . . . . . . . . . . . . . . . . .   7
-     4.3.  Scheme Construction . . . . . . . . . . . . . . . . . . .   7
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
-   6.  Operational Considerations  . . . . . . . . . . . . . . . . .   8
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
-   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     8.1.  Normative References  . . . . . . . . . . . . . . . . . .   8
-     8.2.  Informative References  . . . . . . . . . . . . . . . . .   8
-   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .   9
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   9
+       4.1.1.  Authentication Tag  . . . . . . . . . . . . . . . . .   7
+     4.2.  Digital Signature . . . . . . . . . . . . . . . . . . . .   8
+       4.2.1.  Application Data  . . . . . . . . . . . . . . . . . .   8
+     4.3.  Scheme Construction . . . . . . . . . . . . . . . . . . .   8
+   5.  ALTA Configuration  . . . . . . . . . . . . . . . . . . . . .   9
+     5.1.  Performance Considerations  . . . . . . . . . . . . . . .   9
+       5.1.1.  MAC selection . . . . . . . . . . . . . . . . . . . .   9
+       5.1.2.  Digital signature selection . . . . . . . . . . . . .   9
+     5.2.  Out-of-band Metadata  . . . . . . . . . . . . . . . . . .   9
+   6.  Operational Considerations  . . . . . . . . . . . . . . . . .   9
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
+     7.1.  Parsing an ill-formed or inconsistent payload . . . . . .   9
+     7.2.  Index overflow  . . . . . . . . . . . . . . . . . . . . .   9
+     7.3.  Truncated MACs  . . . . . . . . . . . . . . . . . . . . .   9
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .   9
+   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  10
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  Introduction
 
    Authenticity of streaming data may be inexpensively established via
    symmetric message authentication codes (MACs) using keys pre-shared
    exclusively between two parties, as the receiver knows it did not
-   originate the data and that only one other party has access to the
-   key.  In the presence of multiple receivers, however, this is not
-   possible because all receivers must have access to the same key,
-   giving any one of them the ability to forge messages.  Consequently,
 
 
 
@@ -114,6 +114,10 @@ Rose                     Expires January 9, 2020                [Page 2]
 Internet-Draft                    ALTA                         July 2019
 
 
+   originate the data and that only one other party has access to the
+   key.  In the presence of multiple receivers, however, this is not
+   possible because all receivers must have access to the same key,
+   giving any one of them the ability to forge messages.  Consequently,
    authentication must be made asymmetric, such that only the sender has
    the ability to produce messages that correct receivers will verify as
    authentic.
@@ -154,6 +158,17 @@ Internet-Draft                    ALTA                         July 2019
    patterns of loss, and with digital signature authentication load
    greatly reduced relative to the naive approach.  This algorithm is
    based on research by Golle and Modadugu, as published in [STRAUTH].
+   Live multicast streaming over an unreliable transport is the intended
+   application for ALTA: object-based integrity solutions or transport
+   security may be more appropriate for unicast transmission or for
+   static objects pulled on-demand.
+
+
+
+Rose                     Expires January 9, 2020                [Page 3]
+
+Internet-Draft                    ALTA                         July 2019
+
 
 2.  Conventions and Definitions
 
@@ -162,13 +177,6 @@ Internet-Draft                    ALTA                         July 2019
    "OPTIONAL" in this document are to be interpreted as described in BCP
    14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
-
-
-
-Rose                     Expires January 9, 2020                [Page 3]
-
-Internet-Draft                    ALTA                         July 2019
-
 
 3.  Protocol Overview
 
@@ -198,14 +206,6 @@ Internet-Draft                    ALTA                         July 2019
    For purposes of illustration, a simple example scheme is one in which
    the ith ALTA payload's authentication tag contains MACs for the
    (i-1)th and (i-2)th payload:
-
-
-
-
-
-
-
-
 
 
 
@@ -272,7 +272,7 @@ Internet-Draft                    ALTA                         July 2019
                             .   .
 
    The recommended scheme is more complex and will be covered in detail
-   in the section on scheme construction.
+   in Section 4.3.
 
 
 
@@ -284,24 +284,24 @@ Internet-Draft                    ALTA                         July 2019
 
    Encoding a scheme relies on ALTA payloads being addressable
    deterministically by an index even in the presence of reordering or
-   loss.  This index may be provided by a sequence number in the
-   application data or by a (truncated but fully-resolvable) payload
-   sequence number added at ALTA payload construction time.  Two modes
-   are supported:
+   loss.  This index may be deduced from the application data (e.g.,
+   making use of an existing sequence number) or by a payload index
+   explicitly encoded in the authentication tag.  Two modes are
+   supported:
 
-   o  If the index increments by exactly one for each payload in the
-      stream, and if the scheme is known to both sender and receiver,
-      then indices are not required to be encoded for each MAC in an
-      authentication tag as they can be deduced from a given payload's
-      index and from the DAG associated with the scheme.  Hereafter this
-      is referred to as _implicit index mode_.
+   o  If the index starts at zero and increments by exactly one for each
+      payload in the stream, and if the scheme is known to both sender
+      and receiver, then indices are not required to be encoded for each
+      MAC in an authentication tag as they can be deduced from a given
+      payload's index and from the DAG associated with the scheme.
+      Hereafter, this is referred to as _implicit offset mode_.
 
    o  If the index increments unpredictably, or if the scheme is not
       known to the receiver, then each MAC in an authentication tag must
       be paired with the explicit index of the ALTA payload from which
       the MAC is computed.  For compactness, this index will be encoded
       as an offset relative to the index of the containing payload.
-      Hereafter this is referred to as _explicit index mode_.
+      Hereafter this is referred to as _explicit offset mode_.
 
    Authenticity of a payload is established by a chain of MACs rooted in
    an ALTA payload whose authentication tag contains a digital signature
@@ -322,14 +322,14 @@ Internet-Draft                    ALTA                         July 2019
 
 4.1.  ALTA Payload
 
-4.1.1.  Explicit Index Form
+   An ALTA payload comprises the following elements (defined below)
+   concatenated in-order:
 
-   An ALTA payload with explicit indices comprises the following
-   elements (defined below) concatenated in-order:
+   o  Authentication tag
 
-   o  A header octet
+      *  Options octet
 
-   o  An optional payload index
+      *  Optional payload index
 
 
 
@@ -338,53 +338,53 @@ Rose                     Expires January 9, 2020                [Page 6]
 Internet-Draft                    ALTA                         July 2019
 
 
-   o  A sequence of (index, MAC) pairs
+      *  Sequence of chained MACs
 
-   o  An optional digital signature
+      *  Optional digital signature
 
    o  Application data
+
+4.1.1.  Authentication Tag
+
+   The authentication tag is the metadata emitted by an ALTA-compliant
+   sender that is required, in combination with other out-of-band
+   metadata, by an ALTA-compliant receiver to authenticate a stream of
+   packets in a manner tolerant to loss and reordering.
+
+4.1.1.1.  Options Octet
 
     0 1 2 3 4 5 6 7
    +-+-+-+-+-+-+-+-+
    |MACct|S| rsvd  |
    +-+-+-+-+-+-+-+-+
 
-                          Figure 1: Header Octet
+                          Figure 1: Options Octet
 
-   The first octet of the payload contains the count of MACs included in
-   the payload ("MACct") as well as a flag "S" indicating whether the
-   payload also contains a digital signature.  It also contains four
-   reserved bits which MUST be set to 0 by senders and ignored by
-   receivers.
+   The first octet of the authentication tag contains the count of MACs
+   included ("MACct") as well as a flag "S" indicating whether the tag
+   also contains a digital signature.  It also contains four reserved
+   bits which MUST be set to 0 by senders and ignored by receivers.
+
+4.1.1.2.  Payload Index
 
     0                   1
-    0 1 2 3 4 5 6 7 8 9 0 1
-   +-+-+-+-+-+-+-+-+-+-+-+-
-   |     index     | MAC...
-   +-+-+-+-+-+-+-+-+-+-+-+-
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 ...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+   |          payload index ...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-                     Figure 2: MAC with explicit index
+                          Figure 2: Payload Index
 
-   Each MAC encoded in the payload comprises a single-octet index,
-   expressed as an offset in two's complement, followed by the digest,
-   which is of a constant length specified by out-of-band metadata.
+   If the payload index cannot be deduced from the application data in
+   this payload, it must be specified explicitly in the authentication
+   tag as an unsigned quantity of a fixed length specified by out-of-
+   band metadata.
 
-4.1.2.  Index
-
-4.1.3.  MAC Computation
-
-4.1.4.  Application Data
-
-4.2.  Authentication Tag
-
-4.2.1.  Chained MACs
-
-4.2.2.  Digital Signature
-
-4.3.  Scheme Construction
-
-
-
+   Whether explicit or deduced, the payload index uniquely identifies a
+   single ALTA stream payload within a rollover window of size "2^N" for
+   some "N" specified in out-of-band metadata.  The payload index MUST
+   start at zero and increment by one for each payload transmitted, with
+   rollover to zero on overflow.
 
 
 
@@ -394,9 +394,73 @@ Rose                     Expires January 9, 2020                [Page 7]
 Internet-Draft                    ALTA                         July 2019
 
 
-5.  Security Considerations
+4.1.1.3.  Chained MACs
 
-   TODO Security
+    0                   1
+    0 1 2 3 4 5 6 7 8 9 0 1 ...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-
+   |    offset     | MAC ...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+                 Figure 3: Example MAC with explicit index
+
+   In explicit offset mode, each MAC encoded in the payload comprises an
+   offset from the payload's index, expressed as a signed octet in two's
+   complement, followed by a fixed-length MAC.  The length and semantics
+   of the MAC are a function of the MAC algorithm, which is specified by
+   out-of-band metadata.  The offset space given in the example in
+   Figure 3 is one octet, ranging from -128 to 127, but may be of any
+   number of whole octets, as specified by out-of-band metadata.
+
+   In implicit offset mode, the receiver knows the scheme being employed
+   and so can deduce the indices of the chained MACs from the current
+   payload's index.  Consequently, the MACs are simply concatenated in
+   ascending order of source index according to the scheme.
+
+4.2.  Digital Signature
+
+    0 1 2 3 4 5 6 ...
+   +-+-+-+-+-+-+-+-+-
+   |  signature ...
+   +-+-+-+-+-+-+-+-+-
+
+                        Figure 4: Digital Signature
+
+   If "S=1" in the options octet, then a digital signature is included
+   in the tag.  The length and content of this digital signature are a
+   function of the signature algorithm, which is specified by out-of-
+   band metadata.
+
+4.2.1.  Application Data
+
+   The application data is opaque, with the exception of the payload
+   index if not specified explicitly in the authentication tag.
+
+4.3.  Scheme Construction
+
+   In the ALTA context, a scheme describes the directed acyclic graph of
+   payload MACs embedded in other payloads for purposes of chained
+   authentication.  The recommended scheme is that described in section
+   3.2 of [STRAUTH], with "a=3" and "p=5".
+
+
+
+Rose                     Expires January 9, 2020                [Page 8]
+
+Internet-Draft                    ALTA                         July 2019
+
+
+   FIXME: Describe how to construct this scheme in pseudocode.
+
+5.  ALTA Configuration
+
+5.1.  Performance Considerations
+
+5.1.1.  MAC selection
+
+5.1.2.  Digital signature selection
+
+5.2.  Out-of-band Metadata
 
 6.  Operational Considerations
 
@@ -405,24 +469,42 @@ Internet-Draft                    ALTA                         July 2019
    versioning of the protocol to support a future ALTA revision may be
    performed there and acted upon by the application.
 
-7.  IANA Considerations
+7.  Security Considerations
+
+7.1.  Parsing an ill-formed or inconsistent payload
+
+7.2.  Index overflow
+
+7.3.  Truncated MACs
+
+8.  IANA Considerations
 
    This document has no IANA actions.
 
-8.  References
+9.  References
 
-8.1.  Normative References
+9.1.  Normative References
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-8.2.  Informative References
+9.2.  Informative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+
+
+
+
+
+Rose                     Expires January 9, 2020                [Page 9]
+
+Internet-Draft                    ALTA                         July 2019
+
 
    [RFC4082]  Perrig, A., Song, D., Canetti, R., Tygar, J., and B.
               Briscoe, "Timed Efficient Stream Loss-Tolerant
@@ -437,18 +519,7 @@ Internet-Draft                    ALTA                         July 2019
               ISOC Network and Distributed System Security Symposium
 
    [timeskew]
-              "Need a reference for how bad time sync is", n.d..
-
-
-
-
-
-
-
-Rose                     Expires January 9, 2020                [Page 8]
-
-Internet-Draft                    ALTA                         July 2019
-
+              "FIXME reference for how bad time sync is", n.d..
 
 Acknowledgments
 
@@ -486,19 +557,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Rose                     Expires January 9, 2020                [Page 9]
+Rose                     Expires January 9, 2020               [Page 10]
