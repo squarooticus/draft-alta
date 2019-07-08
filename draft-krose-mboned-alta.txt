@@ -9,7 +9,7 @@ Expires: January 9, 2020
 
 
                 Asymmetric Loss-Tolerant Authentication
-                        draft-krose-alta-latest
+                     draft-krose-mboned-alta-latest
 
 Abstract
 
