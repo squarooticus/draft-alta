@@ -3,9 +3,9 @@
 
 
 Network Working Group                                            K. Rose
-Internet-Draft                                 Akamai Technologies, Inc.
-Intended status: Experimental                              July 08, 2019
-Expires: January 9, 2020
+Internet-Draft                                                J. Holland
+Intended status: Experimental                  Akamai Technologies, Inc.
+Expires: January 9, 2020                                   July 08, 2019
 
 
                 Asymmetric Loss-Tolerant Authentication
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Rose                     Expires January 9, 2020                [Page 1]
+Rose & Holland           Expires January 9, 2020                [Page 1]
 
 Internet-Draft                    ALTA                         July 2019
 
@@ -99,7 +99,7 @@ Table of Contents
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .   9
      9.2.  Informative References  . . . . . . . . . . . . . . . . .   9
    Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  10
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  10
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  Introduction
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Rose                     Expires January 9, 2020                [Page 2]
+Rose & Holland           Expires January 9, 2020                [Page 2]
 
 Internet-Draft                    ALTA                         July 2019
 
@@ -165,7 +165,7 @@ Internet-Draft                    ALTA                         July 2019
 
 
 
-Rose                     Expires January 9, 2020                [Page 3]
+Rose & Holland           Expires January 9, 2020                [Page 3]
 
 Internet-Draft                    ALTA                         July 2019
 
@@ -221,7 +221,7 @@ Internet-Draft                    ALTA                         July 2019
 
 
 
-Rose                     Expires January 9, 2020                [Page 4]
+Rose & Holland           Expires January 9, 2020                [Page 4]
 
 Internet-Draft                    ALTA                         July 2019
 
@@ -277,7 +277,7 @@ Internet-Draft                    ALTA                         July 2019
 
 
 
-Rose                     Expires January 9, 2020                [Page 5]
+Rose & Holland           Expires January 9, 2020                [Page 5]
 
 Internet-Draft                    ALTA                         July 2019
 
@@ -333,7 +333,7 @@ Internet-Draft                    ALTA                         July 2019
 
 
 
-Rose                     Expires January 9, 2020                [Page 6]
+Rose & Holland           Expires January 9, 2020                [Page 6]
 
 Internet-Draft                    ALTA                         July 2019
 
@@ -389,7 +389,7 @@ Internet-Draft                    ALTA                         July 2019
 
 
 
-Rose                     Expires January 9, 2020                [Page 7]
+Rose & Holland           Expires January 9, 2020                [Page 7]
 
 Internet-Draft                    ALTA                         July 2019
 
@@ -445,7 +445,7 @@ Internet-Draft                    ALTA                         July 2019
 
 
 
-Rose                     Expires January 9, 2020                [Page 8]
+Rose & Holland           Expires January 9, 2020                [Page 8]
 
 Internet-Draft                    ALTA                         July 2019
 
@@ -501,7 +501,7 @@ Internet-Draft                    ALTA                         July 2019
 
 
 
-Rose                     Expires January 9, 2020                [Page 9]
+Rose & Holland           Expires January 9, 2020                [Page 9]
 
 Internet-Draft                    ALTA                         July 2019
 
@@ -523,21 +523,28 @@ Internet-Draft                    ALTA                         July 2019
 
 Acknowledgments
 
-   The author wishes to acknowledge the contributions of his colleague,
-   Jake Holland, whose work with interdomain multicast live video
-   delivery drove the need for a robust solution to the streaming
-   authentication problem, and Eric Rescorla, who introduced the author
-   to the paper describing the loss-tolerant symmetric authentication
-   scheme used as the basis for ALTA.
+   The author wishes to acknowledge Eric Rescorla, who introduced the
+   author to the paper describing the loss-tolerant symmetric
+   authentication scheme used as the basis for ALTA.
 
-Author's Address
+Authors' Addresses
 
    Kyle Rose
    Akamai Technologies, Inc.
+   150 Broadway
+   Cambridge, MA 02144
+   United States of America
 
    Email: krose@krose.org
 
 
+   Jake Holland
+   Akamai Technologies, Inc.
+   150 Broadway
+   Cambridge, MA 02144
+   United States of America
+
+   Email: jakeholland.net@gmail.com
 
 
 
@@ -550,11 +557,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-Rose                     Expires January 9, 2020               [Page 10]
+Rose & Holland           Expires January 9, 2020               [Page 10]
