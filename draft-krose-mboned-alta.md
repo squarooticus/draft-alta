@@ -17,17 +17,11 @@ author:
     ins: "K. Rose"
     name: "Kyle Rose"
     organization: "Akamai Technologies, Inc."
-    street: 150 Broadway
-    city: Cambridge, MA 02144
-    country: United States of America
     email: krose@krose.org
  -
     ins: "J. Holland"
     name: "Jake Holland"
     organization: "Akamai Technologies, Inc."
-    street: 150 Broadway
-    city: Cambridge, MA 02144
-    country: United States of America
     email: jakeholland.net@gmail.com
 
 normative:
@@ -253,4 +247,4 @@ This document has no IANA actions.
 # Acknowledgments
 {:numbered="false"}
 
-The author wishes to acknowledge Eric Rescorla, who introduced the author to the paper describing the loss-tolerant symmetric authentication scheme used as the basis for ALTA.
+The author wishes to acknowledge Eric Rescorla, who introduced the authors to the paper describing the loss-tolerant symmetric authentication scheme used as the basis for ALTA.
