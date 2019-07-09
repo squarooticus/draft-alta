@@ -523,7 +523,7 @@ Internet-Draft                    ALTA                         July 2019
 
 Acknowledgments
 
-   The author wishes to acknowledge Eric Rescorla, who introduced the
+   The authors wish to acknowledge Eric Rescorla, who introduced the
    authors to the paper describing the loss-tolerant symmetric
    authentication scheme used as the basis for ALTA.
 
