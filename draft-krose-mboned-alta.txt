@@ -524,27 +524,27 @@ Internet-Draft                    ALTA                         July 2019
 Acknowledgments
 
    The author wishes to acknowledge Eric Rescorla, who introduced the
-   author to the paper describing the loss-tolerant symmetric
+   authors to the paper describing the loss-tolerant symmetric
    authentication scheme used as the basis for ALTA.
 
 Authors' Addresses
 
    Kyle Rose
    Akamai Technologies, Inc.
-   150 Broadway
-   Cambridge, MA 02144
-   United States of America
 
    Email: krose@krose.org
 
 
    Jake Holland
    Akamai Technologies, Inc.
-   150 Broadway
-   Cambridge, MA 02144
-   United States of America
 
    Email: jakeholland.net@gmail.com
+
+
+
+
+
+
 
 
 
