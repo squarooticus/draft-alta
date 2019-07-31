@@ -247,4 +247,4 @@ This document has no IANA actions.
 # Acknowledgments
 {:numbered="false"}
 
-The authors wish to acknowledge Eric Rescorla, who introduced the authors to the paper describing the loss-tolerant symmetric authentication scheme used as the basis for ALTA.
+The authors wish to acknowledge Eric Rescorla, who introduced the authors to the paper describing the loss-tolerant asymmetric authentication scheme used as the basis for ALTA.
